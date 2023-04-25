@@ -4,29 +4,16 @@ package ProjetoAeroporto;
 public class Fila {
     private Nodo inicio = null;
     private Nodo fim;
-    private int tempo;
-    
-//    private int limite = 5;
-//    private int tamanho = 0;
 
     public Fila() {
     
     }
-	public Fila(int tempo) {
-    	this.tempo = tempo;
-    }
-	public int getTempo() {
-		return tempo;
-	}
-	public void setTempo(int tempo) {
-		this.tempo = tempo;
-	}
+
     public boolean estaVazio() {
     	if(inicio == null)return true;
     	else
     		return false;
     }
-
     public int getInicio() {
         if(!estaVazio()) {
             return inicio.getDado();
@@ -46,7 +33,7 @@ public class Fila {
             }
     }
     public void inserir(int dado) {
-            Nodo novo = new Nodo(dado, tempo);
+            Nodo novo = new Nodo(dado);
             if(estaVazio()) {
                 inicio = novo;
                 fim = novo;
@@ -116,21 +103,22 @@ public class Fila {
     	Nodo aux = inicio;
     	do {
     		aux.setDuracao(aux.getDuracao()+1);
-    		aux.getProx();
+    		aux = aux.getProx();
     	}while(aux != null);
     	return;
     }
     public Nodo verificaCondicoesTempo() {
     	if(estaVazio())return null;
     	Nodo aux = inicio;
+    	Nodo menos = inicio;
     	if(aux.getDado() == 0)return null;
     	do {
-    		if(aux == inicio && aux.getTempo() <= 5) {
-    			return aux;
+    		if(aux.getTempo() < menos.getTempo() && aux.getTempo() <= 3) {
+    			menos = aux;
     		}else
     			aux = aux.getProx();
     	}while(aux != null);
-    	return null;	
+    	return menos;	
     }
     public void removePorNodo(Nodo nodo) {
         if (estaVazio()) return;
@@ -152,7 +140,7 @@ public class Fila {
     public boolean verificaGargaloFila(boolean filaCheia, Fila fila) {	
     	if(estaVazio())return false;
     	filaCheia = false;
-    	if(fila.contaFila() >= 2 ) {
+    	if(fila.contaFila() >= 10 ) {
     		filaCheia = true;
     	}else
     		filaCheia = false;	
@@ -162,14 +150,65 @@ public class Fila {
     	if(estaVazio())return 0;
     	Nodo aux = inicio;
     	int count = 0;
+    	int entupe = 0;
     	do {
     		if(aux.getTempo() <= 2) {
     			System.out.println("O aviao cujo id é "+aux.getDado()+" teve um pouso de emergência");
     			removePorNodo(aux);
+    			entupe =+ 1;
     			count++;
     		}
     		aux = aux.getProx();
+    	}while(aux != null && entupe != 2);
+    	return count;
+    }
+    public String montaTabela() {
+    	String tabela = "//---------------------------------------||---------------------------------------//";
+    	return tabela;
+    }
+    public boolean tempoBaixo() {
+    	if(estaVazio())return false;
+    	boolean tem = false;
+    	Nodo aux = inicio;
+    	do {
+    		if(aux.getTempo() <= 4)
+    			tem = true;
+    		aux = aux.getProx();
     	}while(aux != null);
+    	return tem;
+    	
+    }
+    public boolean tempoAlto() {
+    	if(estaVazio())return false;
+    	boolean tem = false;
+    	Nodo aux = inicio;
+    	do {
+    		if(aux.getTempo() >= 15)
+    			tem = true;
+    		if(aux.getTempo() <= 8)return false;
+    		aux = aux.getProx();
+    	}while(aux != null);
+    	return tem;
+    }
+    public int tamanhoFila() {
+    	int count = 0;
+    	if(estaVazio())return count;
+    	Nodo aux = inicio;
+    	do {
+    		count ++;
+    		aux = aux.getProx();
+    	}while(aux != null);
+    	return count;
+    }
+    public float somaPeriodo() {
+    	if(estaVazio())return 0;
+    	Nodo aux = inicio;
+    	float count = 0;
+    	do {
+    		count =+ aux.getTempo();
+    		aux = aux.getProx();
+    	}while(aux != null);
+    	System.out.println(count);
     	return count;
     }
 }
